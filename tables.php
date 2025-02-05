@@ -1,5 +1,6 @@
 <?php
 // Include the database connection file
+include('db.php');
 include('incidents.php');
 include('delete_client.php');
 
