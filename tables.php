@@ -25,6 +25,7 @@ $emergency_result = $conn->query($emergency_sql);
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        <link href="table_style.css" rel="stylesheet" />
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -115,7 +116,7 @@ $emergency_result = $conn->query($emergency_sql);
                             <div class="card-body">
                                 DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
                                 <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
-                                .
+                                
                             </div>
                         </div>
                         <div class="card mb-4">
@@ -123,94 +124,6 @@ $emergency_result = $conn->query($emergency_sql);
                                 <i class="fas fa-table me-1"></i>
                                 DataTable Example
                             </div>
-                            <style>
-                            /* General Table Styling */
-                            table {
-                                width: 100%;
-                                border-collapse: collapse;
-                                margin-bottom: 1rem;
-                                font-size: 0.9rem;
-                                background-color: #ffffff;
-                            }
-
-                            th, td {
-                                padding: 12px;
-                                text-align: left;
-                                border: 1px solid #ddd;
-                            }
-
-                            th {
-                                background-color: #f8f9fa;
-                                color: #333;
-                                font-weight: bold;
-                            }
-
-                            /* Table Row Hover Effect */
-                            tr:hover {
-                                background-color: #f1f1f1;
-                            }
-
-                            /* Buttons Styling */
-                            .btn {
-                                padding: 5px 10px;
-                                text-decoration: none;
-                                border-radius: 4px;
-                                color: white;
-                                font-size: 0.85rem;
-                                text-align: center;
-                                display: inline-block;
-                            }
-
-                            .btn-warning {
-                                background-color: #ffc107;
-                            }
-
-                            .btn-warning:hover {
-                                background-color: #e0a800;
-                            }
-
-                            .btn-danger {
-                                background-color: #dc3545;
-                            }
-
-                            .btn-danger:hover {
-                                background-color: #c82333;
-                            }
-
-                            /* Responsive Table */
-                            @media (max-width: 768px) {
-                                table {
-                                font-size: 0.8rem;
-                                }
-
-                                th, td {
-                                padding: 8px;
-                                }
-                            }
-
-                            /* Card Styling */
-                            .card {
-                                border: 1px solid #ddd;
-                                border-radius: 8px;
-                                padding: 16px;
-                                background-color: #ffffff;
-                                margin-bottom: 20px;
-                                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-                            }
-
-                            .card-header {
-                                font-size: 1.2rem;
-                                font-weight: bold;
-                                background-color: #f8f9fa;
-                                padding: 10px 15px;
-                                border-bottom: 1px solid #ddd;
-                            }
-
-                            .card-body {
-                                padding: 15px;
-                            }
-                            </style>
-
                             <div class="card-body">
                                 <table id="datatablesSimple">
                                     <thead>
@@ -316,6 +229,14 @@ $emergency_result = $conn->query($emergency_sql);
         <script src="js/scripts.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
+        <script>
+            window.addEventListener('DOMContentLoaded', (event) => {
+                const datatablesSimple = document.getElementById('datatablesSimple');
+                if (datatablesSimple) {
+                    new simpleDatatables.DataTable(datatablesSimple);
+                }
+            });
+        </script>
 
     </body>
 </html>
