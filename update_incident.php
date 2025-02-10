@@ -2,6 +2,7 @@
 // Include the database connection file
 include('db.php');
 
+
 // Initialize variables for form data
 $plate_no = $vehicle = $owner = $phone_no = '';
 $id = ''; // Add an ID to identify the record to edit
@@ -13,13 +14,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vehicle = $_POST['vehicle'];
     $owner = $_POST['owner'];
     $phone_no = $_POST['phone_no'];
-    $id = $_POST['id']; // Get the ID of the record to edit
+    $incident_id = $_POST['incident_id']; // Get the ID of the record to edit
 
     // Validate the inputs
     if (!empty($plate_no) && !empty($vehicle) && !empty($owner) && !empty($phone_no)) {
         // Prepare the SQL query to update the record
         $sql = "UPDATE incident_table SET plate_no = :plate_no, vehicle = :vehicle, owner = :owner, phone_no = :phone_no 
-                WHERE id = :id";
+                WHERE incident_id = :incident_id";
 
         // Prepare the statement
         if ($stmt = $conn->prepare($sql)) {
@@ -28,13 +29,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bindParam(':vehicle', $vehicle);
             $stmt->bindParam(':owner', $owner);
             $stmt->bindParam(':phone_no', $phone_no);
-            $stmt->bindParam(':id', $id); // Bind the ID for updating the correct record
+            $stmt->bindParam(':incident_id', $incident_id); // Bind the ID for updating the correct record
 
             // Execute the query
             if ($stmt->execute()) {
                 echo "<script>
                         alert('Record updated successfully!');
-                        window.location.href = 'tables.php';
+                        window.location.href = 'table.php';
                       </script>";
             } else {
                 echo "Error updating record: " . $stmt->errorInfo()[2];
@@ -48,11 +49,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 // If an ID is provided, fetch the existing record to pre-fill the form
-if (isset($_GET['id'])) {
-    $id = $_GET['id'];
-    $sql = "SELECT * FROM incident_table WHERE id = :id";
+if (isset($_GET['incident_id'])) {
+    $id = $_GET['incident_id'];
+    $sql = "SELECT * FROM incident_table WHERE incident_id = :incident_id";
     if ($stmt = $conn->prepare($sql)) {
-        $stmt->bindParam(':id', $id);
+        $stmt->bindParam(':incident_id', $incident_id);
         $stmt->execute();
         $record = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -94,7 +95,7 @@ if (isset($_GET['id'])) {
                                 </div>
                                 <div class="card-body">
                                     <form method="POST" action="">
-                                        <input type="hidden" name="id" value="<?= htmlspecialchars($id); ?>" /> <!-- Hidden field for ID -->
+                                        <input type="hidden" name="id" value="<?= htmlspecialchars($incident_id); ?>" /> <!-- Hidden field for ID -->
                                         <div class="form-floating mb-3">
                                         <div><label for="inputPlateNo">Plate Number</label></div>
                                         <input class="form-control" id="inputPlateNo" type="text" name="plate_no" placeholder="<?= htmlspecialchars($plate_no); ?>" required />

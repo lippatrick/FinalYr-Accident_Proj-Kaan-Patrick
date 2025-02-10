@@ -31,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ($stmt->execute()) {
                 echo "<script>
                         alert('Record inserted successfully!');
-                        window.location.href = 'tables.php';
+                        window.location.href = 'table.php';
                       </script>";
             } else {
                 echo "Error inserting record: " . $stmt->errorInfo()[2];
@@ -92,7 +92,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                     </form>
                                 </div>
                                 <div class="card-footer text-center py-3">
-                                    <div class="small"><a href="tables.php">Back to Records</a></div>
+                                    <div class="small"><a href="table.php">Back to Records</a></div>
                                 </div>
                             </div>
                         </div>

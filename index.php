@@ -91,7 +91,7 @@ $result = $conn->query($sql);
                                     </a>
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
+                                            
                                             <a class="nav-link" href="addClient.php">AddClient</a>
                                             <a class="nav-link" href="password.html">Forgot Password</a>
                                         </nav>
@@ -104,7 +104,7 @@ $result = $conn->query($sql);
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
-                            <a class="nav-link" href="tables.php">
+                            <a class="nav-link" href="table.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tables
                             </a>
@@ -112,7 +112,7 @@ $result = $conn->query($sql);
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        Staff Member
                     </div>
                 </nav>
             </div>
@@ -166,7 +166,7 @@ $result = $conn->query($sql);
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-area me-1"></i>
-                                        Area Chart Example
+                                        Area Chart For Incidents
                                     </div>
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
@@ -175,7 +175,7 @@ $result = $conn->query($sql);
                                 <div class="card mb-4">
                                     <div class="card-header">
                                         <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart Example
+                                        Bar Chart For Incidents
                                     </div>
                                     <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
                                 </div>
@@ -184,7 +184,7 @@ $result = $conn->query($sql);
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                Accident Incident DataTable
                             </div>
                             <div class="card-body">
                                <div>
@@ -201,18 +201,7 @@ $result = $conn->query($sql);
                                             <th>Status</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Incident ID</th>
-                                            <th>Plate_No</th>
-                                            <th>Vehicle</th>
-                                            <th>Owner</th>
-                                            <th>Tel_No</th>
-                                            <th>Location</th>
-                                            <th>IncidentTime</th>
-                                            <th>Status</th>
-                                        </tr>
-                                    </tfoot>
+                                    
                                     <tbody id="incidentData">
                                  <?php
                                         if ($result->num_rows > 0) {

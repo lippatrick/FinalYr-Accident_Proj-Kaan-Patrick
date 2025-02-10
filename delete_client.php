@@ -17,12 +17,12 @@ if (isset($_GET['id'])) {
     if ($stmt->execute()) {
         echo "<script>
                 alert('Incident successfully deleted!');
-                window.location.href = 'tables.php';
+                window.location.href = 'table.php';
               </script>";
     } else {
         echo "<script>
                 alert('Error deleting the incident.');
-                window.location.href = 'tables.php';
+                window.location.href = 'table.php';
               </script>";
     }
 

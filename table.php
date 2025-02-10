@@ -1,17 +1,30 @@
 <?php
-// Include the database connection file
-include('db.php');
+// include('dp.php');
 include('incidents.php');
-include('delete_client.php');
 
-// Fetch data from the database
 $sql = "SELECT * FROM incident_table"; // Replace 'incidents' with your table name
 $result = $conn->query($sql);
 
 $emergency_sql = "SELECT * FROM emergency_centers";
 $emergency_result = $conn->query($emergency_sql);
 
+if ($conn->connect_error) {
+    die("Database connection failed: " . $conn->connect_error);
+}
+
+if (!$result) {
+    die("Error fetching incident data: " . $conn->error);
+}
+
+if (!$emergency_result) {
+    die("Error fetching emergency center data: " . $conn->error);
+}
+
+
+
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -21,16 +34,15 @@ $emergency_result = $conn->query($emergency_sql);
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
         <meta name="description" content="" />
         <meta name="author" content="" />
-        <title>Tables - SB Admin</title>
+        <title>Tables</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
-        <link href="table_style.css" rel="stylesheet" />
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
             <!-- Navbar Brand-->
-            <a class="navbar-brand ps-3" href="index.php">Start Bootstrap</a>
+            <a class="navbar-brand ps-3" href="index.php">Accident Detection</a>
             <!-- Sidebar Toggle-->
             <button class="btn btn-link btn-sm order-1 order-lg-0 me-4 me-lg-0" id="sidebarToggle" href="#!"><i class="fas fa-bars"></i></button>
             <!-- Navbar Search-->
@@ -48,7 +60,7 @@ $emergency_result = $conn->query($emergency_sql);
                         <li><a class="dropdown-item" href="#!">Settings</a></li>
                         <li><a class="dropdown-item" href="#!">Activity Log</a></li>
                         <li><hr class="dropdown-divider" /></li>
-                        <li><a class="dropdown-item" href="#!">Logout</a></li>
+                        <li><a class="dropdown-item" href="login.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>
@@ -64,11 +76,20 @@ $emergency_result = $conn->query($emergency_sql);
                                 Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
-                            <!-- layouts -->
-                            
+                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
+                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
+                                Layouts
+                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                            </a>
+                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                                <nav class="sb-sidenav-menu-nested nav">
+                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
+                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
+                                </nav>
+                            </div>
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
-                                Pages
+                                Management
                                 <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                             </a>
                             <div class="collapse" id="collapsePages" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
@@ -80,7 +101,7 @@ $emergency_result = $conn->query($emergency_sql);
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" href="login.html">Login</a>
-                                            <a class="nav-link" href="register.html">Register</a>
+                                            <a class="nav-link" href="addClient.php">Add Client</a>
                                             <a class="nav-link" href="password.html">Forgot Password</a>
                                         </nav>
                                     </div>
@@ -92,7 +113,7 @@ $emergency_result = $conn->query($emergency_sql);
                                 <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
                                 Charts
                             </a>
-                            <a class="nav-link" href="tables.php">
+                            <a class="nav-link" href="table.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tables
                             </a>
@@ -100,7 +121,7 @@ $emergency_result = $conn->query($emergency_sql);
                     </div>
                     <div class="sb-sidenav-footer">
                         <div class="small">Logged in as:</div>
-                        Start Bootstrap
+                        Staff Member
                     </div>
                 </nav>
             </div>
@@ -109,20 +130,20 @@ $emergency_result = $conn->query($emergency_sql);
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Tables</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
                             <li class="breadcrumb-item active">Tables</li>
                         </ol>
                         <div class="card mb-4">
                             <div class="card-body">
                                 DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
                                 <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
-                                
+                                .
                             </div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
-                                DataTable Example
+                                Incident DataTable
                             </div>
                             <div class="card-body">
                                 <table id="datatablesSimple">
@@ -131,84 +152,60 @@ $emergency_result = $conn->query($emergency_sql);
                                             <th>Incident ID</th>
                                             <th>Plate_No</th>
                                             <th>Vehicle</th>
-                                            <th>Owner</th>
-                                            <th>Tel_No</th>
+                                            <th>Owner_Name</th>
+                                            <th>Owner_Tel</th>
+                                            <th>Kin_Telephone</th>
                                             <th>Location</th>
-                                            <th>IncidentTime</th>
+                                            <th>Incident_Time</th>
                                             <th>Status</th>
+                                            <th>Action</th>
                                         </tr>
                                     </thead>
-                                   
-                                    <tbody id="incidentData">
-                                        <?php
-                                        if ($result->num_rows > 0) {
-                                            // Output data of each row
-                                            while ($row = $result->fetch_assoc()) {
-                                                echo "<tr>
-                                                    <td>" . $row['incident_id'] . "</td>
-                                                    <td>" . $row['plate_no'] . "</td>
-                                                    <td>" . $row['vehicle'] . "</td>
-                                                    <td>" . $row['owner'] . "</td>
-                                                    <td>" . $row['phone_no'] . "</td>
-                                                    <td>" . $row['location'] . "</td>
-                                                    <td>" . $row['incident_time'] . "</td>
-                                                    <td>" . $row['status'] . "</td>
-                                                    <td>
-                                                    <a href='register.php?id=" . $row['incident_id'] . "' class='btn btn-warning btn-sm'>Edit</a>
-                                                    <a href='delete_client.php?id=" . $row['incident_id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this incident?\")'>Delete</a>
-                                                    </td>
-                                                </tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='8'>No data found</td></tr>";
-                                        }
-                                        ?>
-                                    </tbody>
-                                </table>
-
-                            </div>
-                            
-                        </div>
-                              <!-- emergency table code -->
-                              <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-table me-1"></i>
-                                        Emergency Centers
-                                    </div>
-                                    <div class="card-body">
-                                        <table id="datatablesSimple">
-                                        <thead>
-                                            <tr>
-                                            <th>ID</th>
-                                            <th>Emergency Center</th>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Incident ID</th>
+                                            <th>plate_no</th>
+                                            <th>Vehicle</th>
+                                            <th>Owner_Name</th>
+                                            <th>Owner_Tel</th>
+                                            <th>Kin_Telephone</th>
                                             <th>Location</th>
-                                            <th>Contact Number</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <?php
-                                            if ($emergency_result->num_rows > 0) {
-                                                while ($row = $emergency_result->fetch_assoc()) {
+                                            <th>Incident_Time</th>
+                                            <th>Status</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <?php
+                                            if ($result->num_rows > 0) {
+                                                // Output data of each row
+                                                while ($row = $result->fetch_assoc()) {
                                                     echo "<tr>
-                                                            <td>" . $row['center_id'] . "</td>
-                                                            <td>" . $row['center_name'] . "</td>
-                                                            <td>" . $row['center_location'] . "</td>
-                                                            <td>" . $row['contact_number'] . "</td>
-                                                            <td>
-                                                                <a href='edit_emergency_center.php?id=" . $row['center_id'] . "' class='btn btn-warning btn-sm'>Edit</a>
-                                                                <a href='delete_emergency_center.php?id=" . $row['center_id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this center?\")'>Delete</a>
-                                                            </td>
-                                                        </tr>";
+                                                        <td>" . $row['incident_id'] . "</td>
+                                                        <td>" . $row['plate_no'] . "</td>
+                                                        <td>" . $row['vehicle'] . "</td>
+                                                        <td>" . $row['owner'] . "</td>
+                                                        <td>" . $row['phone_no'] . "</td>
+                                                        <td>" . $row['kin_phone_no'] . "</td>
+                                                        <td>" . $row['location'] . "</td>
+                                                        <td>" . $row['incident_time'] . "</td>
+                                                        <td>" . $row['status'] . "</td>
+                                                        <td>
+                                                            <a href='update_incident.php?id=" . $row['incident_id'] . "' class='btn btn-warning btn-sm'>Edit</a>
+                                                            <a href='delete_client.php?id=" . $row['incident_id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this incident?\")'>Delete</a>
+                                                        </td>
+                                                    </tr>";
                                                 }
                                             } else {
-                                                echo "<tr><td colspan='4'>No emergency center data found</td></tr>";
+                                                echo "<tr><td colspan='8'>No data found</td></tr>";
                                             }
                                             ?>
-                                        </tbody>
-                                        </table>
-                                    </div>
-                                    </div>
-                                    <!-- end of emergency code  -->
+                                        
+                                        
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
                 </main>
                 <footer class="py-4 bg-light mt-auto">
@@ -229,14 +226,5 @@ $emergency_result = $conn->query($emergency_sql);
         <script src="js/scripts.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
-        <script>
-            window.addEventListener('DOMContentLoaded', (event) => {
-                const datatablesSimple = document.getElementById('datatablesSimple');
-                if (datatablesSimple) {
-                    new simpleDatatables.DataTable(datatablesSimple);
-                }
-            });
-        </script>
-
     </body>
 </html>
