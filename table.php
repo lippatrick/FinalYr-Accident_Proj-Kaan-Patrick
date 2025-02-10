@@ -102,7 +102,7 @@ if (!$emergency_result) {
                                         <nav class="sb-sidenav-menu-nested nav">
                                             <a class="nav-link" href="login.html">Login</a>
                                             <a class="nav-link" href="addClient.php">Add Client</a>
-                                            <a class="nav-link" href="password.html">Forgot Password</a>
+                                            <a class="nav-link" href="add_emergency_center.php">Add Emergency Center</a>
                                         </nav>
                                     </div>
                                     
@@ -130,7 +130,7 @@ if (!$emergency_result) {
                     <div class="container-fluid px-4">
                         <h1 class="mt-4">Tables</h1>
                         <ol class="breadcrumb mb-4">
-                            <li class="breadcrumb-item"><a href="index.html">Dashboard</a></li>
+                            <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Tables</li>
                         </ol>
                         <div class="card mb-4">
@@ -140,6 +140,7 @@ if (!$emergency_result) {
                                 .
                             </div>
                         </div>
+                        <!-- incidents table for all the victims -->
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-table me-1"></i>
@@ -204,7 +205,63 @@ if (!$emergency_result) {
                                         
                                     </tbody>
                                 </table>
+
                             </div>
+                            
+                        </div>
+                        <div class="card mb-4">
+                                                            <!-- emergency table section -->
+                                
+                                                            <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-table me-1"></i>
+                                            Emergency DataTable
+                                    </div>
+                                
+                                <table id="datatablesSimple">
+                                    <thead>
+                                        <tr>
+                                            <th>Center_ID</th>
+                                            <th>Center_Name</th>
+                                            <th>Center_Location</th>
+                                            <th>Contact_Number</th>
+                                            <th>Action</th>
+                                            
+                                        </tr>
+                                    </thead>
+                                    <tfoot>
+                                        <tr>
+                                            <th>Center_ID</th>
+                                            <th>Center_Name</th>
+                                            <th>Center_Location</th>
+                                            <th>Contact_Number</th>
+                                            <th>Action</th>
+                                        </tr>
+                                    </tfoot>
+                                    <tbody>
+                                        <?php
+                                            if ($emergency_result->num_rows > 0) {
+                                                // Output data of each row
+                                                while ($row = $emergency_result->fetch_assoc()) {
+                                                    echo "<tr>
+                                                        <td>" . $row['center_id'] . "</td>
+                                                        <td>" . $row['center_name'] . "</td>
+                                                        <td>" . $row['center_location'] . "</td>
+                                                        <td>" . $row['contact_number'] . "</td>
+                                                        <td>
+                                                            <a href='edit_center.php?id=" . $row['center_id'] . "' class='btn btn-warning btn-sm'>Edit</a>
+                                                            <a href='delete_emergency.php?center_id=" . $row['center_id'] . "' class='btn btn-danger btn-sm' onclick='return confirm(\"Are you sure you want to delete this center?\")'>Delete</a>
+                                                        </td>
+                                                        </tr>";
+                                                }
+                                            } else {
+                                                echo "<tr><td colspan='4'>No emergency center data found</td></tr>";
+                                            }
+                                            ?>
+                                        
+                                        
+                                    </tbody>
+                                </table>
                         </div>
                     </div>
                 </main>
@@ -226,5 +283,14 @@ if (!$emergency_result) {
         <script src="js/scripts.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/umd/simple-datatables.min.js" crossorigin="anonymous"></script>
         <script src="js/datatables-simple-demo.js"></script>
+
+        <script>
+            window.addEventListener('DOMContentLoaded', (event) => {
+                const datatablesSimple = document.getElementById('datatablesSimple');
+                if (datatablesSimple) {
+                    new simpleDatatables.DataTable(datatablesSimple);
+                }
+            });
+        </script>
     </body>
 </html>
