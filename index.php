@@ -26,6 +26,8 @@ $result = $conn->query($sql);
         <title>Smart Real-Time Accident Detection and Monitoring</title>
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
@@ -171,15 +173,20 @@ $result = $conn->query($sql);
                                     <div class="card-body"><canvas id="myAreaChart" width="100%" height="40"></canvas></div>
                                 </div>
                             </div>
+                             <!-- google map location section start-->
                             <div class="col-xl-6">
-                                <div class="card mb-4">
-                                    <div class="card-header">
-                                        <i class="fas fa-chart-bar me-1"></i>
-                                        Bar Chart For Incidents
-                                    </div>
-                                    <div class="card-body"><canvas id="myBarChart" width="100%" height="40"></canvas></div>
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <i class="fas fa-chart-bar me-1"></i>
+                                    GPS Location Viewer
+                                </div>
+                                <div class="card-body" id="mapContainer">
+                                    <!-- Map content will be loaded here -->
+                                    <?php include('google_location.php') ?>
                                 </div>
                             </div>
+                             <!-- google map location section end -->
+                        </div>
                         </div>
                         <div class="card mb-4">
                             <div class="card-header">
@@ -196,6 +203,7 @@ $result = $conn->query($sql);
                                             <th>Vehicle</th>
                                             <th>Owner</th>
                                             <th>Tel_No</th>
+                                            <th>Kin_Phone_No</th>
                                             <th>Location</th>
                                             <th>IncidentTime</th>
                                             <th>Status</th>
@@ -228,6 +236,7 @@ $result = $conn->query($sql);
                                                         <td>" . $row['vehicle'] . "</td>
                                                         <td>" . $row['owner'] . "</td>
                                                         <td>" . $row['phone_no'] . "</td>
+                                                        <td>" . $row['kin_phone_no'] . "</td>
                                                         <td>" . $row['location'] . "</td>
                                                         <td>" . $row['incident_time'] . "</td>
                                                         <td>" . $row['status'] . "</td>
@@ -241,19 +250,7 @@ $result = $conn->query($sql);
                                     </tbody>
                                 </table>
                                </div>
-                                <div class="row">
-                                    <div class="col-xl-6">
-                                        <div class="card mb-4">
-                                            <div class="card-header">
-                                                <i class="fas fa-map-marker-alt me-1"></i>
-                                                Google Map
-                                            </div>
-                                            <div class="card-body">
-                                                <div id="map" style="height: 400px; width: 100%;"></div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                                
 
                             </div>
                         </div>
@@ -304,6 +301,13 @@ $result = $conn->query($sql);
                 });
             }
             </script>
+            <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+            <script>
+                $(document).ready(function() {
+                    // Load map.php into the div with id 'mapContainer'
+                    $('#mapContainer').load('map.php');
+                });
+            </script> -->
 
 
     </body>
