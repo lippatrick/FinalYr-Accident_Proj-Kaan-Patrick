@@ -54,4 +54,3 @@ if ($incidentId) {
 }
 
 $conn->close();
-?>
