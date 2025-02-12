@@ -5,7 +5,7 @@ require 'db.php'; // Include the database connection
 // Check if the user is logged in and is an admin
 if (!isset($_SESSION['role']) || $_SESSION['role'] != 'admin') {
     header("Location: login.php");
-    exit();
+    exit(); 
 }
 
 // Fetch all users
