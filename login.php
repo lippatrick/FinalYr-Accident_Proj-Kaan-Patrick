@@ -49,6 +49,14 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     <title>Login - Admin Panel</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="login_styles.css"> <!-- Link to the external CSS file -->
+    <style>
+         body {
+            background-image: url('images/knock_accident.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+        }
+    </style>
 </head>
 <body>
     <div class="container-fluid d-flex align-items-center justify-content-center vh-100">
@@ -56,7 +64,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         <div class="login-container d-flex align-items-center">
             <!-- Left side for accident image -->
             <div class="image-container">
-                <img src="images/accide.jpeg" alt="Accident Image" class="img-fluid">
+                <img src="images/login_image1.jpg" alt="Accident Image" class="img-fluid">
             </div>
             <!-- Right side for login form -->
             <div class="form-container">
@@ -80,12 +88,34 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <button type="submit" class="btn btn-primary w-100">Login</button>
                 </form>
                 <div class="login-options">
-                    <a href="#" onclick="showErrorMessage()">Forgot Password?</a>
+                    <a href="forgot_pass.php">Forgot Password?</a>
                 </div>
                 <div id="errorMessage" class="error-message" style="display: none;">Incorrect username or password. Please try again.</div>
             </div>
         </div>
     </div>
+    <style>
+        .container-fluid {
+            height: 80vh;
+        }
+
+        .login-container {
+            display: flex;
+            height: 60%;
+            width: 80%;
+        }
+
+        .image-container img {
+            object-fit: cover; /* Makes sure the image covers the entire left side */
+            width: 800%;
+            height: 100%;
+        }
+
+        .form-container {
+            flex: 1;
+            padding: 20px;
+        } 
+    </style>
 
     <!-- Modal for error message -->
     <div class="modal fade" id="loginErrorModal" tabindex="-1" aria-labelledby="loginErrorModalLabel" aria-hidden="true">

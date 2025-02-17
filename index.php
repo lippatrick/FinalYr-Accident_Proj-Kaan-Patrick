@@ -27,9 +27,13 @@ $result = $conn->query($sql);
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&callback=initMap" async defer></script>
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
 
         <link href="css/styles.css" rel="stylesheet" />
+        <link href="statusSytles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
     </head>
     <body class="sb-nav-fixed">
@@ -211,43 +215,48 @@ $result = $conn->query($sql);
                                     </thead>
                                     
                                     <tbody id="incidentData">
-                                 <?php
-                                        if ($result->num_rows > 0) {
-                                            // Output data of each row
-                                            while ($row = $result->fetch_assoc()) {
-                                                $status = strtolower($row['status']); // Normalize status for button color logic
-                                                $buttonColor = '';
+<?php
+if ($result->num_rows > 0) {
+    while ($row = $result->fetch_assoc()) {
+        $status = strtolower($row['status']);
+        $buttonColorClass = '';
+        $icon = '';
 
-                                                switch ($status) {
-                                                    case 'high':
-                                                        $buttonColor = 'red';
-                                                        break;
-                                                    case 'medium':
-                                                        $buttonColor = 'orange';
-                                                        break;
-                                                    case 'low':
-                                                        $buttonColor = 'green';
-                                                        break;
-                                                }
+        switch ($status) {
+            case 'high':
+                $buttonColorClass = 'status-high';
+                $icon = '<i class="fas fa-times-circle"></i>';
+                break;
+            case 'medium':
+                $buttonColorClass = 'status-medium';
+                $icon = '<i class="fas fa-exclamation-circle"></i>';
+                break;
+            case 'low':
+                $buttonColorClass = 'status-low';
+                $icon = '<i class="fas fa-check-circle"></i>';
+                break;
+        }
 
-                                                echo "<tr>
-                                                        <td>" . $row['incident_id'] . "</td>
-                                                        <td>" . $row['plate_no'] . "</td>
-                                                        <td>" . $row['vehicle'] . "</td>
-                                                        <td>" . $row['owner'] . "</td>
-                                                        <td>" . $row['phone_no'] . "</td>
-                                                        <td>" . $row['kin_phone_no'] . "</td>
-                                                        <td>" . $row['location'] . "</td>
-                                                        <td>" . $row['incident_time'] . "</td>
-                                                        <td>" . $row['status'] . "</td>
-                                                        
-                                                    </tr>";
-                                            }
-                                        } else {
-                                            echo "<tr><td colspan='8'>No data found</td></tr>";
-                                        }
-                                        ?>
-                                    </tbody>
+        echo "<tr>
+                <td>" . $row['incident_id'] . "</td>
+                <td>" . $row['plate_no'] . "</td>
+                <td>" . $row['vehicle'] . "</td>
+                <td>" . $row['owner'] . "</td>
+                <td>" . $row['phone_no'] . "</td>
+                <td>" . $row['kin_phone_no'] . "</td>
+                <td>" . $row['location'] . "</td>
+                <td>" . $row['incident_time'] . "</td>
+                <td><a href='#' onclick='sendSms(" . $row['incident_id'] . ")' class='status-btn " . $buttonColorClass . "'>" . $icon . " " . ucfirst($status) . "</a></td>
+            </tr>";
+    }
+} else {
+    echo "<tr><td colspan='8'>No data found</td></tr>";
+}
+?>
+</tbody>
+
+
+
                                 </table>
                                </div>
                                 
@@ -279,7 +288,7 @@ $result = $conn->query($sql);
         <script src="js/datatables-simple-demo.js"></script>
 
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-        <script>
+        <!-- <script>
             function sendSms(phoneNumber, status) {
                 // Example SMS logic with a placeholder API request
                 fetch('sendsms.php', {
@@ -300,15 +309,31 @@ $result = $conn->query($sql);
                     alert('Error sending SMS: ' + error);
                 });
             }
-            </script>
-            <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-            <script>
-                $(document).ready(function() {
-                    // Load map.php into the div with id 'mapContainer'
-                    $('#mapContainer').load('map.php');
-                });
             </script> -->
 
+
+            <!-- javascript for the status button to send SMS -->
+     <script>
+        function sendSms(incidentId) {
+    // Create an AJAX request to send the SMS
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "send_sms.php", true);
+    xhr.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+
+    // Send incident_id to the backend
+    xhr.send("incident_id=" + incidentId);
+
+    // Handle the response
+    xhr.onload = function() {
+        if (xhr.status == 200) {
+            alert("SMS Sent successfully!");
+        } else {
+            alert("Error sending SMS.");
+        }
+    };
+}
+
+     </script>
 
     </body>
 </html>

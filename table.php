@@ -11,20 +11,14 @@ $emergency_result = $conn->query($emergency_sql);
 if ($conn->connect_error) {
     die("Database connection failed: " . $conn->connect_error);
 }
-
 if (!$result) {
     die("Error fetching incident data: " . $conn->error);
 }
-
 if (!$emergency_result) {
     die("Error fetching emergency center data: " . $conn->error);
 }
 
-
-
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="en">
@@ -133,13 +127,7 @@ if (!$emergency_result) {
                             <li class="breadcrumb-item"><a href="index.php">Dashboard</a></li>
                             <li class="breadcrumb-item active">Tables</li>
                         </ol>
-                        <div class="card mb-4">
-                            <div class="card-body">
-                                DataTables is a third party plugin that is used to generate the demo table below. For more information about DataTables, please visit the
-                                <a target="_blank" href="https://datatables.net/">official DataTables documentation</a>
-                                .
-                            </div>
-                        </div>
+                        
                         <!-- incidents table for all the victims -->
                         <div class="card mb-4">
                             <div class="card-header">
@@ -201,8 +189,6 @@ if (!$emergency_result) {
                                                 echo "<tr><td colspan='8'>No data found</td></tr>";
                                             }
                                             ?>
-                                        
-                                        
                                     </tbody>
                                 </table>
 

@@ -1,0 +1,59 @@
+/* Ensure anchor tags inside .status-btn are styled like buttons */
+.status-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px; /* Adjust padding for a cleaner look */
+    font-size: 16px;
+    font-weight: bold;
+    color: white;
+    text-decoration: none; /* Remove underline */
+    border-radius: 8px; /* Smaller border radius */
+    border: 2px solid transparent;
+    cursor: pointer;
+    transition: all 0.3s ease-in-out;
+    text-transform: capitalize; /* Capitalize status text */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Soft shadow */
+    min-width: 120px; /* Ensure buttons have the same minimum width */
+    height: 40px; /* Ensure buttons are the same height */
+    text-align: center; /* Center the text */
+}
+
+/* Ensure the icon is spaced properly from the text */
+.status-btn i {
+    margin-right: 8px;
+}
+
+/* Updated button color styles */
+.status-high {
+    background: linear-gradient(145deg, #d32f2f, #b71c1c); /* Deep red for high risk */
+    border-color: #c62828;
+}
+
+.status-medium {
+    background: linear-gradient(145deg, #f39c12, #f57c00); /* Yellow-orange for medium risk */
+    border-color: #f57c00;
+}
+
+.status-low {
+    background: linear-gradient(145deg, #42a5f5, #1e88e5); /* Blue for low risk */
+    border-color: #1976d2;
+}
+
+/* Hover and Active Effects */
+.status-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px); /* Slight hover lift effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* Increased shadow on hover */
+}
+
+.status-btn:active {
+    transform: translateY(1px); /* Button press effect */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Smaller shadow on click */
+}
+
+/* Fix Bootstrap's default link styles that may interfere */
+a {
+    text-decoration: none !important;  /* Remove underline from all anchor tags */
+    outline: none;  /* Remove any outline on click */
+}
