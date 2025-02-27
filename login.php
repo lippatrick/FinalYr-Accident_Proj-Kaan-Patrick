@@ -101,13 +101,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         .login-container {
             display: flex;
-            height: 60%;
+            height: 70%;
             width: 80%;
         }
 
         .image-container img {
             object-fit: cover; /* Makes sure the image covers the entire left side */
-            width: 800%;
+            width: 100%;
             height: 100%;
         }
 

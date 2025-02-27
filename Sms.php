@@ -1,58 +1,122 @@
 <?php
-// Include database connection
-include 'db.php';
+// Database connection
+$host = 'localhost';
+$username = 'root';
+$password = '';
+$dbname = 'smart_accident';
 
-// Fetch incident_id from POST data
-$incidentId = $_POST['incident_id'];
+$conn = new mysqli($host, $username, $password, $dbname);
 
-// Fetch incident data
-$sql = "SELECT i.plate_no, i.vehicle, i.location, i.status, i.kin_phone_no, e.contact_numbers 
-        FROM incident_table i 
-        JOIN emergency_centers e ON e.district = i.location 
-        WHERE i.incident_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("i", $incidentId);
-$stmt->execute();
-$result = $stmt->get_result();
-$row = $result->fetch_assoc();
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
 
-// Prepare message for SMS
-$message = "Incident Report\n";
-$message .= "Plate No: " . $row['plate_no'] . "\n";
-$message .= "Vehicle: " . $row['vehicle'] . "\n";
-$message .= "Location: " . $row['location'] . "\n";
-$message .= "Status: " . ucfirst($row['status']) . "\n";
+// Get the device_plate from the URL parameter
+if (isset($_GET['device_plate'])) {
+    $device_plate = $_GET['device_plate'];
 
-// Combine kin_phone_no and emergency contacts
-$phoneNumbers = $row['kin_phone_no'] . ',' . $row['contact_numbers']; // Comma-separated phone numbers
+    // Fetch the relevant details (priority, entry_time) from the gps_data table for the device_plate
+    $stmt = $conn->prepare("SELECT priority, entry_time, latitude, longitude FROM gps_data WHERE device_plate = ? ORDER BY entry_time DESC LIMIT 1");
+    $stmt->bind_param("s", $device_plate);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-// Send SMS to kin and emergency contacts using an SMS API
-// Example using Infobip API (Twilio or any SMS provider can be used similarly)
-$apiUrl = 'https://api.infobip.com/sms/1/text/single';
-$apiKey = 'YOUR_INFOBIP_API_KEY';
-$sender = 'YOUR_SENDER_ID';
+    if ($result->num_rows > 0) {
+        $gps_data = $result->fetch_assoc();
+        $priority = $gps_data['priority'];
+        $entry_time = $gps_data['entry_time'];
+        $latitude = $gps_data['latitude'];
+        $longitude = $gps_data['longitude'];
 
-// Prepare SMS request
-$data = [
-    'from' => $sender,
-    'to' => $phoneNumbers,
-    'text' => $message,
-];
+        // Reverse Geocoding using Google Maps API to get location address
+        $apiKey = 'YOUR_GOOGLE_MAPS_API_KEY'; // Replace with your API key
+        $geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey";
+        $response = file_get_contents($geoUrl);
+        $geoData = json_decode($response);
 
-$options = [
-    'http' => [
-        'header'  => "Authorization: Basic " . base64_encode("apikey:$apiKey"),
-        'method'  => 'POST',
-        'content' => json_encode($data),
-    ],
-];
-$context  = stream_context_create($options);
-$response = file_get_contents($apiUrl, false, $context);
+        if ($geoData && $geoData->status == "OK") {
+            $location = $geoData->results[0]->formatted_address;
+        } else {
+            $location = "Location not found";
+        }
 
-// Check response
-if ($response) {
-    echo "SMS Sent!";
-} else {
-    echo "Failed to send SMS.";
+        // Fetch kin_phone_no from the incident_table
+        $incidentStmt = $conn->prepare("SELECT kin_phone_no FROM incident_table WHERE plate_no = ?");
+        $incidentStmt->bind_param("s", $device_plate);
+        $incidentStmt->execute();
+        $incidentResult = $incidentStmt->get_result();
+
+        if ($incidentResult->num_rows > 0) {
+            $incident = $incidentResult->fetch_assoc();
+            $kin_phone_no = $incident['kin_phone_no'];
+
+            // 1. Send SMS alert to kin_phone_no (Emergency Contact from incident_table)
+            sendSmsAlert($kin_phone_no, $device_plate, $priority, $entry_time, $location);
+
+            // 2. Send SMS to all emergency contacts from the emergency_centers table
+            $emergencyStmt = $conn->prepare("SELECT contact_number FROM emergency_centers");
+            $emergencyStmt->execute();
+            $emergencyResult = $emergencyStmt->get_result();
+
+            while ($row = $emergencyResult->fetch_assoc()) {
+                // Send SMS alert to each contact number in the emergency_centers table
+                sendSmsAlert($row['contact_number'], $device_plate, $priority, $entry_time, $location);
+            }
+        } else {
+            echo "No emergency contact found for this device plate.";
+        }
+    } else {
+        echo "No GPS data found for this device plate.";
+    }
+
+    $stmt->close();
+    $incidentStmt->close();
+    $emergencyStmt->close();
+}
+
+$conn->close();
+
+// Function to send SMS using Infobip API (with API key authentication)
+function sendSmsAlert($phoneNumber, $devicePlate, $priority, $entryTime, $location) {
+    // Set your Infobip API credentials here
+    $apiUrl = 'https://kqqyyx.api.infobip.com';  // Updated URL
+    $apiKey = 'your_infobip_api_key';  // Replace with your Infobip API key
+
+    // Prepare the SMS message
+    $message = "URGENT: Vehicle Plate: $devicePlate\nPriority: $priority\nTime: $entryTime\nLocation: $location";
+
+    // Prepare the request data
+    $data = [
+        "messages" => [
+            [
+                "from" => "AccidentAlert", // You can change this to your sender ID
+                "to" => $phoneNumber,
+                "text" => $message
+            ]
+        ]
+    ];
+
+    // Initialize the cURL session
+    $ch = curl_init($apiUrl . "/sms/2/text/advanced");
+    curl_setopt($ch, CURLOPT_HTTPHEADER, [
+        "Authorization: App $apiKey",  // Use 'App' followed by your API key for authentication
+        "Content-Type: application/json"
+    ]);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
+    curl_setopt($ch, CURLOPT_POST, true);
+    curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
+
+    // Execute the cURL request
+    $response = curl_exec($ch);
+
+    if (curl_errno($ch)) {
+        echo 'Curl error: ' . curl_error($ch);
+    } else {
+        // Handle the response (logging or additional actions can be added here)
+        echo "SMS sent to $phoneNumber successfully!";
+    }
+
+    // Close the cURL session
+    curl_close($ch);
 }
 ?>
