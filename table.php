@@ -32,6 +32,104 @@ if (!$emergency_result) {
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
+        
+        <style>
+            /* Styling for the overall card and table sections */
+.card.mb-4 {
+    border: 1px solid #4e73df; /* Dark navy blue border */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    margin-bottom: 20px;
+    padding: 10px;
+}
+
+/* Styling for the card header */
+.card-header {
+    background-color: #2c3e50; /* Dark navy blue */
+    color: white;
+    font-size: 1.1rem;
+    font-weight: bold;
+    padding: 12px 15px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
+
+/* Table styles */
+#datatablesSimple {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0;
+    font-size: 0.85rem;
+}
+
+#datatablesSimple thead {
+    background-color: #34495e; /* Lighter dark navy blue */
+    text-align: left;
+    color: white;
+}
+
+#datatablesSimple th, #datatablesSimple td {
+    padding: 8px 12px;
+    border-bottom: 1px solid #ddd;
+}
+
+#datatablesSimple th {
+    background-color: #2c3e50; /* Dark navy blue */
+    font-weight: bold;
+}
+
+#datatablesSimple tr:nth-child(even) {
+    background-color: #ecf0f1; /* Light grey */
+}
+
+#datatablesSimple tbody tr:hover {
+    background-color: #bdc3c7; /* Light gray for hover effect */
+    cursor: pointer;
+}
+
+/* Styling for buttons in the action column */
+#datatablesSimple .btn {
+    text-decoration: none;
+    padding: 5px 10px;
+    font-size: 0.8rem;
+    border-radius: 4px;
+    color: white;
+    margin-right: 5px;
+    transition: background-color 0.3s ease;
+}
+
+#datatablesSimple .btn-sm {
+    font-size: 0.75rem;
+}
+
+/* Styling for the 'Edit' button */
+#datatablesSimple .btn-warning {
+    background-color: #f39c12;
+}
+
+#datatablesSimple .btn-warning:hover {
+    background-color: #e67e22;
+}
+
+/* Styling for the 'Delete' button */
+#datatablesSimple .btn-danger {
+    background-color: #e74a3b;
+}
+
+#datatablesSimple .btn-danger:hover {
+    background-color: #c0392b;
+}
+
+/* Styling for the empty table message */
+#datatablesSimple tbody tr td[colspan='10'] {
+    text-align: center;
+    font-style: italic;
+    color: #888;
+}
+
+
+        </style>
     </head>
     <body class="sb-nav-fixed">
         <nav class="sb-topnav navbar navbar-expand navbar-dark bg-dark">
@@ -70,17 +168,8 @@ if (!$emergency_result) {
                                 Dashboard
                             </a>
                             <div class="sb-sidenav-menu-heading">Interface</div>
-                            <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseLayouts" aria-expanded="false" aria-controls="collapseLayouts">
-                                <div class="sb-nav-link-icon"><i class="fas fa-columns"></i></div>
-                                Layouts
-                                <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-                            </a>
-                            <div class="collapse" id="collapseLayouts" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-                                <nav class="sb-sidenav-menu-nested nav">
-                                    <a class="nav-link" href="layout-static.html">Static Navigation</a>
-                                    <a class="nav-link" href="layout-sidenav-light.html">Light Sidenav</a>
-                                </nav>
-                            </div>
+                            
+                            
                             <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePages" aria-expanded="false" aria-controls="collapsePages">
                                 <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
                                 Management
@@ -94,7 +183,7 @@ if (!$emergency_result) {
                                     </a>
                                     <div class="collapse" id="pagesCollapseAuth" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordionPages">
                                         <nav class="sb-sidenav-menu-nested nav">
-                                            <a class="nav-link" href="login.html">Login</a>
+                                            
                                             <a class="nav-link" href="addClient.php">Add Client</a>
                                             <a class="nav-link" href="add_emergency_center.php">Add Emergency Center</a>
                                         </nav>
@@ -103,10 +192,6 @@ if (!$emergency_result) {
                                 </nav>
                             </div>
                             <div class="sb-sidenav-menu-heading">Addons</div>
-                            <a class="nav-link" href="charts.html">
-                                <div class="sb-nav-link-icon"><i class="fas fa-chart-area"></i></div>
-                                Charts
-                            </a>
                             <a class="nav-link" href="table.php">
                                 <div class="sb-nav-link-icon"><i class="fas fa-table"></i></div>
                                 Tables
@@ -150,20 +235,7 @@ if (!$emergency_result) {
                                             <th>Action</th>
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Incident ID</th>
-                                            <th>plate_no</th>
-                                            <th>Vehicle</th>
-                                            <th>Owner_Name</th>
-                                            <th>Owner_Tel</th>
-                                            <th>Kin_Telephone</th>
-                                            <th>Location</th>
-                                            <th>Incident_Time</th>
-                                            <th>Status</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
+                                    
                                     <tbody>
                                         <?php
                                             if ($result->num_rows > 0) {
@@ -215,15 +287,7 @@ if (!$emergency_result) {
                                             
                                         </tr>
                                     </thead>
-                                    <tfoot>
-                                        <tr>
-                                            <th>Center_ID</th>
-                                            <th>Center_Name</th>
-                                            <th>Center_Location</th>
-                                            <th>Contact_Number</th>
-                                            <th>Action</th>
-                                        </tr>
-                                    </tfoot>
+                                    
                                     <tbody>
                                         <?php
                                             if ($emergency_result->num_rows > 0) {

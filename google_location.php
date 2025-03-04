@@ -150,62 +150,78 @@ $conn->close();
     }
 </script>
 
-
 <style>
+    
+
     /* Add styles for the pop-in div */
-    .card.popin-card {
-        background-color: #fff;
-        border: 1px solid #ccc;
-        border-radius: 8px;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-        margin-top: 20px;
-    }
+.card.popin-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: fixed;
+    top: 60%;
+    right: 10px;
+    transform: translateY(-50%); /* Center it vertically */
+    z-index: 9999; /* Ensure it stays on top */
+    width: 300px; /* Adjust width as per your requirement */
+    height: 30vh; /* Set the height to 30% of the viewport height */
+    max-height: 40%; /* Optional: To make sure the card doesn't overflow */
+    overflow-y: auto; /* Make it scrollable if content overflows */
+    transition: all 0.3s ease;
+}
 
-    .card-header.popin-card-header {
-        background-color: #343a40;
-        color: white;
-        font-weight: bold;
-        padding: 10px 15px;
-        border-top-left-radius: 8px;
-        border-top-right-radius: 8px;
-    }
+/* Styling for the card header */
+.card-header.popin-card-header {
+    background-color: #343a40;
+    color: white;
+    font-weight: bold;
+    padding: 10px 15px;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+}
 
-    .card-body.popin-card-body {
-        padding: 15px;
-        font-size: 14px;
-        color: #333;
-        height: 200px;
-        overflow-y: auto;
-    }
+/* Styling for the card body */
+.card-body.popin-card-body {
+    padding: 15px;
+    font-size: 14px;
+    color: #333;
+    height: 100%; /* Allow the card to fill the container */
+    overflow-y: auto; /* Enable scroll inside the card if needed */
+}
 
-    .device-plates-container {
-        display: flex;
-        flex-direction: column;
-        gap: 10px;
-    }
+/* Device Plates Container */
+.device-plates-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
 
-    .device-plate-card {
-        background-color: #f8f9fa;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        text-align: center;
-        transition: all 0.3s ease;
-    }
+/* Device Plate Card Styling */
+.device-plate-card {
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    transition: all 0.3s ease;
+}
 
-    .device-plate-card:hover {
-        background-color: #e9ecef;
-        transform: scale(1.05);
-    }
+.device-plate-card:hover {
+    background-color: #e9ecef;
+    transform: scale(1.05);
+}
 
-    .device-plate-link {
-        text-decoration: none;
-        font-weight: bold;
-        color: #007bff;
-        font-size: 16px;
-    }
+/* Device Plate Link Styling */
+.device-plate-link {
+    text-decoration: none;
+    font-weight: bold;
+    color: #007bff;
+    font-size: 16px;
+}
 
-    .device-plate-link:hover {
-        color: #0056b3;
-    }
+.device-plate-link:hover {
+    color: #0056b3;
+}
+
 </style>

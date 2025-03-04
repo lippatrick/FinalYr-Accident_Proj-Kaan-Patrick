@@ -47,22 +47,133 @@ $logins = $conn->query("SELECT login_activity.*, users.username
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Tables</title>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap" rel="stylesheet">
         <link href="https://cdn.jsdelivr.net/npm/simple-datatables@7.1.2/dist/style.min.css" rel="stylesheet" />
         <link href="css/styles.css" rel="stylesheet" />
         <script src="https://use.fontawesome.com/releases/v6.3.0/js/all.js" crossorigin="anonymous"></script>
         <style>
-        body {
-            background-image: url('images/caution.jpg');
-            background-size: cover;
-            background-position: center;
-            background-attachment: fixed;
+            main {
+                background-image: url('images/admin_image.jpg');
+                background-size: cover; /* Ensures the image covers the entire element */
+                background-position: center center; /* Centers the image */
+                background-repeat: no-repeat; /* Prevents the image from repeating */
+            }
+        </style>
+         <style>
+        /* Container for the flex layout */
+        .container {
+            display: flex;
+            gap: 20px;
+            justify-content: space-between;
+            margin: 20px 0;
         }
-        main {
-    
-    background-image: url('images/admin_image.jpg');
-    background-size: cover; /* Ensures the image covers the entire element */
-    background-position: center center; /* Centers the image */
-    background-repeat: no-repeat; /* Prevents the image from repeating */
+
+        /* Style for the form section (smaller form) */
+        .form-container {
+            flex: 0 0 300px; /* Fixed width to make it smaller */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: box-shadow 0.3s ease;
+        }
+
+        .form-container:hover {
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .form-container h3 {
+            color: #003366; /* Navy Blue color */
+            margin-bottom: 20px;
+            font-size: 22px;
+            font-weight: 600;
+        }
+
+        .form-container input, 
+        .form-container select, 
+        .form-container button {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        .form-container input:focus, 
+        .form-container select:focus, 
+        .form-container button:focus {
+            border-color: #003366; /* Navy Blue color */
+            outline: none;
+        }
+
+        .form-container button {
+            background-color: #003366; /* Navy Blue */
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+            border: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-container button:hover {
+            background-color: #002244; /* Darker Navy Blue */
+        }
+
+        /* Style for the user table */
+        .user-table-container {
+            flex: 1; /* Let the user list take the remaining space */
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .user-list-title {
+            color: #003366; /* Navy Blue */
+            font-size: 24px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        table th,
+        table td {
+            padding: 15px;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        table th {
+            background-color: #003366; /* Navy Blue */
+            color: #fff;
+            font-weight: 600;
+        }
+
+        table tbody tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+
+        table td a {
+            color: #ff0000;
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        table td a:hover {
+            text-decoration: underline;
         }
     </style>
     
@@ -114,51 +225,49 @@ $logins = $conn->query("SELECT login_activity.*, users.username
             <div id="layoutSidenav_content">
            
             <main style="font-family: Arial, sans-serif; background-color: #f0f2f5; padding: 20px; border-radius: 10px; box-shadow: 0 0 10px rgba(0,0,0,0.1);">
-    <div style="position: relative; margin: 20px 0; text-align: center;">
-        <img src="images/accident-18.jpg" alt="Accident Monitoring" style="width: 100%; height: 300px; margin-top: 0; object-fit: cover; filter: brightness(0.6);">
-        <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 36px; font-weight: bold; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">Welcome, Admin</h1>
-    </div>
+            <div style="position: relative; margin: 20px 0; text-align: center; height: 250px; background: rgba(0, 0, 0, 0.5);">
+    <h1 style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); color: #fff; font-size: 50px; font-weight: bold; font-family: 'Roboto', sans-serif; text-shadow: 2px 2px 4px rgba(0,0,0,0.7);">Welcome Admin</h1>
+</div>
 
-    <div style="display: flex; gap: 20px;">
+<div class="container">
         <!-- Add User -->
-        <div style="flex: 1;">
-            <form method="POST" style="display: flex; flex-direction: column; gap: 10px; background-color: #fff; padding: 20px; border-radius: 5px; box-shadow: 0 0 5px rgba(0,0,0,0.1);">
-                <h3 style="color: #555;">Add User</h3>
-                <input type="text" name="username" placeholder="Username" required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                <input type="password" name="password" placeholder="Password" required style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
-                <select name="role" style="padding: 10px; border-radius: 5px; border: 1px solid #ccc;">
+        <div class="form-container">
+            <form method="POST">
+                <h3>Add User</h3>
+                <input type="text" name="username" placeholder="Username" required>
+                <input type="password" name="password" placeholder="Password" required>
+                <select name="role">
                     <option value="user">User</option>
                     <option value="admin">Admin</option>
                 </select>
-                <button type="submit" name="add_user" style="padding: 10px; border-radius: 5px; background-color: #007bff; color: #fff; border: none; cursor: pointer;">Add User</button>
+                <button type="submit" name="add_user">Add User</button>
             </form>
         </div>
 
         <!-- List of Users -->
-         <div><h4 style="margin-top: 20px; color: #555; font-size: 24px;">USERS ADDED</h4></div>
-        
-        <table border="1" style="width: 100%; border-collapse: collapse; background-color: #fff; box-shadow: 0 4px 8px rgba(0,0,0,0.1); border-radius: 8px; overflow: hidden;">
-            <thead style="background-color: #007bff; color: #fff;">
-                <tr>
-                    <th style="padding: 12px; text-align: left;">ID</th>
-                    <th style="padding: 12px; text-align: left;">Username</th>
-                    <th style="padding: 12px; text-align: left;">Role</th>
-                    <th style="padding: 12px; text-align: left;">Actions</th>
-                </tr>
-            </thead>
-            
-            <tbody id="userTableBody">
-                <?php foreach ($users as $user): ?>
-                    <tr style="border-bottom: 1px solid #ddd;">
-                        <td style="padding: 12px;"> <?= $user['id'] ?> </td>
-                        <td style="padding: 12px;"> <?= $user['username'] ?> </td>
-                        <td style="padding: 12px;"> <?= $user['role'] ?> </td>
-                        <td style="padding: 12px;"><a href="?delete_user=<?= $user['id'] ?>" onclick="return confirm('Delete this user?')" style="color: red; text-decoration: none;">Delete</a></td>
+        <div>
+            <h4 class="user-list-title">Users Added</h4>
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Username</th>
+                        <th>Role</th>
+                        <th>Actions</th>
                     </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
-
+                </thead>
+                <tbody id="userTableBody">
+                    <?php foreach ($users as $user): ?>
+                        <tr>
+                            <td><?= $user['id'] ?></td>
+                            <td><?= $user['username'] ?></td>
+                            <td><?= $user['role'] ?></td>
+                            <td><a href="?delete_user=<?= $user['id'] ?>" onclick="return confirm('Delete this user?')">Delete</a></td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <!-- Login Activity -->

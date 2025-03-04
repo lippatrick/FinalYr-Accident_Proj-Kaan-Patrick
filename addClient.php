@@ -3,7 +3,7 @@
 include('db.php');
 
 // Initialize variables for form data
-$plate_no = $vehicle = $owner = $phone_no = '';
+$plate_no = $vehicle = $owner = $phone_no = $kin_phone_no = '';
 
 // Check if the form is submitted
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -12,12 +12,13 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $vehicle = $_POST['vehicle'];
     $owner = $_POST['owner'];
     $phone_no = $_POST['phone_no'];
+    $kin_phone_no = $_POST['kin_phone_no'];
 
     // Validate the inputs
-    if (!empty($plate_no) && !empty($vehicle) && !empty($owner) && !empty($phone_no)) {
+    if (!empty($plate_no) && !empty($vehicle) && !empty($owner) && !empty($phone_no) && !empty($kin_phone_no)) {
         // Prepare the SQL query to insert the record
-        $sql = "INSERT INTO incident_table (plate_no, vehicle, owner, phone_no) 
-                VALUES (:plate_no, :vehicle, :owner, :phone_no)";
+        $sql = "INSERT INTO incident_table (plate_no, vehicle, owner, phone_no, kin_phone_no) 
+                VALUES (:plate_no, :vehicle, :owner, :phone_no, :kin_phone_no)";
 
         // Prepare the statement
         if ($stmt = $conn->prepare($sql)) {
@@ -26,6 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $stmt->bindParam(':vehicle', $vehicle);
             $stmt->bindParam(':owner', $owner);
             $stmt->bindParam(':phone_no', $phone_no);
+            $stmt->bindParam(':kin_phone_no', $kin_phone_no);
 
             // Execute the query
             if ($stmt->execute()) {
@@ -83,6 +85,10 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                                         <div class="form-floating mb-3">
                                             <input class="form-control" id="inputPhoneNo" type="tel" name="phone_no" placeholder="Enter Phone Number" required />
                                             <label for="inputPhoneNo">Phone Number</label>
+                                        </div>
+                                        <div class="form-floating mb-3">
+                                            <input class="form-control" id="inputPhoneNo" type="tel" name="kin_phone_no" placeholder="Enter Phone Number" required />
+                                            <label for="inputPhoneNo">Kin_Phone_No</label>
                                         </div>
                                         <div class="mt-4 mb-0">
                                             <div class="d-grid">

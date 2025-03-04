@@ -10,6 +10,7 @@ if (!isset($_SESSION['username']) || $_SESSION['role'] != 'user') {
 // Include the database connection file
 include('incidents.php');
 
+
 // Fetch data from the database
 $sql = "SELECT * FROM incident_table"; // Replace 'incidents' with your table name
 $result = $conn->query($sql);
@@ -73,60 +74,60 @@ mysqli_close($conn);
         
         </style>
         <!-- CSS Styling for the incident table-->
-<style>
-    .bg-gradient-primary {
-        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    }
-    .bg-gradient-warning {
-        background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
-    }
-    .bg-gradient-danger {
-        background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
-    }
-    .bg-gradient-success {
-        background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
-    }
-    .status-btn {
-        padding: 6px 12px;
-        border-radius: 4px;
-        text-decoration: none;
-        font-weight: bold;
-        transition: transform 0.2s ease, background-color 0.2s ease;
-    }
-    .status-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-    .status-high { background-color: #e57373; color: white; }
-    .status-medium { background-color: #fbc02d; color: white; }
-    .status-low { background-color: #81c784; color: white; }
+        <style>
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            }
+            .bg-gradient-warning {
+                background: linear-gradient(135deg, #f7971e 0%, #ffd200 100%);
+            }
+            .bg-gradient-danger {
+                background: linear-gradient(135deg, #ff416c 0%, #ff4b2b 100%);
+            }
+            .bg-gradient-success {
+                background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+            }
+            .status-btn {
+                padding: 6px 12px;
+                border-radius: 4px;
+                text-decoration: none;
+                font-weight: bold;
+                transition: transform 0.2s ease, background-color 0.2s ease;
+            }
+            .status-btn:hover {
+                transform: scale(1.05);
+                box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+            }
+            .status-high { background-color: #e57373; color: white; }
+            .status-medium { background-color: #fbc02d; color: white; }
+            .status-low { background-color: #81c784; color: white; }
 
-    /* DataTable Styling */
-    table#datatablesSimple {
-        border-collapse: collapse;
-        width: 100%;
-        font-size: 14px;
-        background-color: #f9f9f9;
-        border-radius: 8px;
-        overflow: hidden;
-        box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-    table#datatablesSimple thead tr {
-        background-color: #607d8b;
-        color: #fff;
-    }
-    table#datatablesSimple th, table#datatablesSimple td {
-        padding: 12px 15px;
-        text-align: left;
-    }
-    table#datatablesSimple tbody tr:nth-child(even) {
-        background-color: #e0e0e0;
-    }
-    table#datatablesSimple tbody tr:hover {
-        background-color: #d6d6d6;
-        transition: background-color 0.3s ease;
-    }
-</style>
+            /* DataTable Styling */
+            table#datatablesSimple {
+                border-collapse: collapse;
+                width: 100%;
+                font-size: 14px;
+                background-color: #f9f9f9;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            }
+            table#datatablesSimple thead tr {
+                background-color: #607d8b;
+                color: #fff;
+            }
+            table#datatablesSimple th, table#datatablesSimple td {
+                padding: 12px 15px;
+                text-align: left;
+            }
+            table#datatablesSimple tbody tr:nth-child(even) {
+                background-color: #e0e0e0;
+            }
+            table#datatablesSimple tbody tr:hover {
+                background-color: #d6d6d6;
+                transition: background-color 0.3s ease;
+            }
+        </style>
         
     </head>
     <body class="sb-nav-fixed">
@@ -205,7 +206,7 @@ mysqli_close($conn);
             <div id="layoutSidenav_content">
             <main>
     <div class="container-fluid px-4">
-        <h1 class="mt-4 text-white">Smart Real-Time Accident Detection, Alert and Monitoring System</h1>
+        <h1 class="mt-4 text-white">Smart Real-Time Accident Detection, Alert && Monitoring System</h1>
         <ol class="breadcrumb mb-4">
             <li class="breadcrumb-item active">Dashboard</li>
         </ol>
@@ -287,13 +288,14 @@ mysqli_close($conn);
             </div>
         </div>
         
-
-<div class="row mt-4">
-    <!-- GPS Location Viewer -->
-    <div class="card-body" id="mapContainer">
-                <?php include('google_location.php') ?>
+        <div class="row">
+            <div class="row md-4">
+                <!-- GPS Location Viewer -->
+                <div class="card-body" id="mapContainer">
+                            <?php include('google_location.php') ?>
+                        </div>
             </div>
-</div>
+        </div>
 
         <!-- Accident Incident DataTable -->
         <div class="card mb-4">
@@ -413,27 +415,27 @@ mysqli_close($conn);
     
 
      <!-- JavaScript for Charts -->
-<script>
-    const ctxArea = document.getElementById('myAreaChart').getContext('2d');
-    new Chart(ctxArea, {
-        type: 'line',
-        data: { /* Your area chart data here */ },
-        options: { /* Chart options */ }
-    });
+        <script>
+            const ctxArea = document.getElementById('myAreaChart').getContext('2d');
+            new Chart(ctxArea, {
+                type: 'line',
+                data: { /* Your area chart data here */ },
+                options: { /* Chart options */ }
+            });
 
-    const ctxPie = document.getElementById('myPieChart').getContext('2d');
-    new Chart(ctxPie, {
-        type: 'pie',
-        data: {
-            labels: ["High", "Medium", "Low"],
-            datasets: [{
-                data: [<?php echo $high_count; ?>, <?php echo $medium_count; ?>, <?php echo $low_count; ?>],
-                backgroundColor: ['#ff4b2b', '#fbc02d', '#81c784']
-            }]
-        },
-        options: { responsive: true }
-    });
-</script>
+            const ctxPie = document.getElementById('myPieChart').getContext('2d');
+            new Chart(ctxPie, {
+                type: 'pie',
+                data: {
+                    labels: ["High", "Medium", "Low"],
+                    datasets: [{
+                        data: [<?php echo $high_count; ?>, <?php echo $medium_count; ?>, <?php echo $low_count; ?>],
+                        backgroundColor: ['#ff4b2b', '#fbc02d', '#81c784']
+                    }]
+                },
+                options: { responsive: true }
+            });
+        </script>
 
     </body>
 </html>

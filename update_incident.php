@@ -70,6 +70,8 @@ if (isset($_GET['incident_id'])) {
         echo "Error fetching record: " . $conn->errorInfo()[2];
     }
 }
+
+
 ?>
 
 <!DOCTYPE html>
