@@ -1,6 +1,5 @@
 <?php
 
-
 // Database connection
 $host = 'localhost';
 $username = 'root';
@@ -37,7 +36,7 @@ if (isset($_GET['device_plate'])) {
         $longitude = floatval($row['longitude']);
 
         // Reverse Geocoding to get address from Google Maps API
-        $apiKey = 'AIzaSyBkygXdlMc23xRCwvXUlRig1-LS1XFRSuU'; // Use your actual API Key
+        $apiKey = 'AIzaSyBkygXdlMc23xRCwvXUlRig1-LS1XFRSuU';
         $geoUrl = "https://maps.googleapis.com/maps/api/geocode/json?latlng=$latitude,$longitude&key=$apiKey";
 
         $response = file_get_contents($geoUrl);
@@ -93,62 +92,86 @@ $conn->close();
         </div>
     </div>
     
-    <!-- Pop-in Div (Takes up 25% width) -->
-    <div class="col-xl-3 col-lg-3 col-md-12 mb-4">
-        <div class="card h-100 popin-card">
-            <div class="card-header popin-card-header">
-                <i class="fas fa-info-circle me-1"></i> Income Incidents
-            </div>
-            <div class="card-body popin-card-body">
-                
-                <div class="device-plates-container">
-                    <?php
-                    if ($plateResult->num_rows > 0) {
-                        while ($plate = $plateResult->fetch_assoc()) {
-                            echo "<div class='device-plate-card'>
-                                    <a href='?device_plate=" . urlencode($plate['device_plate']) . "' class='device-plate-link'>
-                                        " . htmlspecialchars($plate['device_plate']) . "
-                                    </a>
-                                  </div>";
-                        }
-                    } else {
-                        echo "<p>No vehicles found.</p>";
+<!-- Pop-in Div (Takes up 25% width) -->
+<div class="col-xl-3 col-lg-3 col-md-12 mb-4">
+    <div class="card h-100 popin-card">
+        <div class="card-header popin-card-header">
+            <i class="fas fa-info-circle me-1"></i> Incoming Incidents
+        </div>
+        <div class="card-body popin-card-body">
+            <div class="device-plates-container">
+                <?php
+                if ($plateResult->num_rows > 0) {
+                    while ($plate = $plateResult->fetch_assoc()) {
+                        $device_plate = htmlspecialchars($plate['device_plate']);
+                        echo "<div class='device-plate-card'>
+                                <a href='?device_plate=$device_plate' class='device-plate-link'>
+                                    $device_plate
+                                </a>
+                            </div>";
                     }
-                    ?>
-                    <?php include 'google.php'; ?>  <!-- Include the incident details here -->
-                </div>
-                
+                } else {
+                    echo "<p>No vehicles found.</p>";
+                }
+                ?>
+
+                <?php include 'google.php'; ?> <!-- Include the incident details here -->
             </div>
         </div>
     </div>
+</div>
+
 </div>
 
 <!-- Google Maps JavaScript -->
 <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBkygXdlMc23xRCwvXUlRig1-LS1XFRSuU&callback=initMap" async defer></script>
 
 <script>
-    // Initialize the map with GPS coordinates
+    let map; // Store map instance
+    let marker; // Store marker instance
+
+    // Initialize the map with default GPS coordinates
     function initMap() {
-        var location = {
-            lat: <?php echo $latitude ?: 0; ?>, 
-            lng: <?php echo $longitude ?: 0; ?>
+        const location = {
+            lat: parseFloat(<?php echo $latitude ?: 0; ?>), 
+            lng: parseFloat(<?php echo $longitude ?: 0; ?>)
         };
 
-        var map = new google.maps.Map(document.getElementById('map'), {
+        map = new google.maps.Map(document.getElementById('map'), {
             zoom: 15,
             center: location
         });
 
-        if (location.lat !== 0 && location.lng !== 0) {
-            new google.maps.Marker({
-                position: location,
-                map: map
-            });
-        } else {
-            document.getElementById('map').innerHTML = "<p>No valid GPS data available to show a map.</p>";
-        }
+        marker = new google.maps.Marker({
+            position: location,
+            map: map
+        });
     }
 </script>
+
+
+
+<!-- script for the SMS sending  -->
+<!-- <script>
+function sendSms(device_plate) {
+    // Assuming incident_id is tied to the device_plate, adjust if needed
+    fetch('smsSend.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ incident_id: device_plate })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.status === 'success') {
+            alert('SMS sent successfully.');
+        } else {
+            alert('Failed to send SMS: ' + data.message);
+        }
+    })
+    .catch(error => console.error('Error:', error));
+}
+</script> -->
+ 
 
 <style>
     

@@ -57,6 +57,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Database error: " . $e->getMessage();
     }
 }
+
 function sendSingleSms($smsData)
 {
     $ch = curl_init(CISSY_COLLECTO_BASE_URL . CISSY_USERNAME . '/sendSingleSMS');

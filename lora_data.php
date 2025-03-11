@@ -2,7 +2,7 @@
 // Set up database connection
 $servername = "localhost"; // Database host
 $username = "root";        // Database username
-$password = "";            // Database password
+$password = "";            // Database password (empty for XAMPP by default)
 $dbname = "smart_accident"; // Database name
 
 // Create connection
@@ -14,23 +14,28 @@ if ($conn->connect_error) {
 }
 
 // Check if POST data exists
-if (isset($_POST['userID'], $_POST['latitude'], $_POST['longitude'], $_POST['severity'])) {
+if (isset($_POST['device_plate'], $_POST['latitude'], $_POST['longitude'], $_POST['status'])) {
 
     // Get the data from the POST request
-    $userID = $conn->real_escape_string($_POST['userID']);
+    $device_plate = $conn->real_escape_string($_POST['device_plate']);
     $latitude = $conn->real_escape_string($_POST['latitude']);
     $longitude = $conn->real_escape_string($_POST['longitude']);
-    $severity = $conn->real_escape_string($_POST['severity']);
+    $status = $conn->real_escape_string($_POST['status']);
 
     // Prepare and bind SQL statement to prevent SQL injection
-    $stmt = $conn->prepare("INSERT INTO accident_table (userID, latitude, longitude, severity) VALUES (?, ?, ?, ?)");
-    $stmt->bind_param("ssss", $userID, $latitude, $longitude, $severity);
+    $stmt = $conn->prepare("INSERT INTO gps_data (device_plate, latitude, longitude, status) VALUES (?, ?, ?, ?)");
+    
+    if ($stmt === false) {
+        die("Error preparing the SQL statement: " . $conn->error);
+    }
+
+    $stmt->bind_param("ssss", $device_plate, $latitude, $longitude, $status);
 
     // Execute the prepared statement
     if ($stmt->execute()) {
         echo "New record created successfully";
     } else {
-        echo "Error: " . $stmt->error;
+        echo "Error executing SQL: " . $stmt->error;
     }
 
     // Close the statement
